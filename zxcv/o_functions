@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+function o() {
+  zxcv o/oc "${@}"
+}
+
+# shellcheck source=/dev/null
+function zxcv_oc() {
+  # local shell
+  # shell="${SHELL##*/}"
+
+  case "${1}" in
+    "pre")
+      ;;
+    "post")
+      # TODO Fix this.  Completions not available in top shell.
+      # source <(oc completion "${shell}" | sed 's/^compdef.*$/& o/')
+      ;;
+  esac
+}
