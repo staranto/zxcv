@@ -4,7 +4,7 @@
 
 * Clone this repo.  This doc will assume you've cloned it to `${HOME}/dev/zxcv`.
 * Bash or Zsh.  Preferably Zsh, but you decide.  Something marginally recent.
-* Install [asdf](https://asdf-vm.com/guide/getting-started.html), [fzf](https://github.com/junegunn/fzf) and [jq](https://stedolan.github.io/jq/).
+* Install [asdf](https://asdf-vm.com/guide/getting-started.html), curl, [fzf](https://github.com/junegunn/fzf) and [jq >= 1.6](https://stedolan.github.io/jq/download/).
   * Install the asdf Terraform plugin - `asdf plugin add terraform`
 
 ## Configuration
@@ -15,8 +15,8 @@
     organization=myorg         # The default TFC/TFE org to use.
     ```
 
-* Make sure you have a TFC/TFE API token set locally.  IOW... do a `terraform login`.  The token will be stored in `${HOME}/.terraformrc` (older Terraform versions) or `${HOME}/.terraform.d/credentials.json` (newer Terraform versions).  It doesn't matter at all which file is used.  We'll always first use the former, even if an older Terraform CLI is being used.
-  * Note that there's a potential chicken-n-egg situation here.  You can't do a `terraform login` unless the CLI is first installed, which might not be the case.  If you don't yet have it installed, you can login to TFC/TFE and go to `User Settings / Tokens / Create API Token` and then create a `${HOME}/.terraform.d/credentials.json` file with this content --
+* Make sure you have a TFC/TFE API token set locally.  IOW... do a `terraform login`.  The token will be stored in `${HOME}/.terraformrc` (older Terraform versions) or `${HOME}/.terraform.d/credentials.tfrc.json` (newer Terraform versions).  It doesn't matter at all which file is used.  We'll always first use the latter, even if an older Terraform CLI is being used.
+  * Note that there's a potential chicken-n-egg situation here.  You can't do a `terraform login` unless the CLI is first installed, which might not be the case.  If you don't yet have it installed, you can login to TFC/TFE and go to `User Settings / Tokens / Create API Token` and then create a `${HOME}/.terraform.d/credentials.tfrc.json` file with this content --
 
     ```
     {
@@ -44,10 +44,10 @@
   * Edit `${HOME}/.zshrc` and include these lines near the top...
 
       ```
-      export REPO_BASEDIR=${HOME}/dev/my-toolkit
+      export REPO_BASEDIR=${HOME}/dev
       export ZXCV_BASEDIR=${REPO_BASEDIR}/zxcv
       for f in ${REPO_BASEDIR}/misc/*.sh; do [[ -f "$f" ]] && . "$f"; done
-      sall ${ZXCV_BASE_DIR}
+      sall ${ZXCV_BASE_DIR}/zxcv
       ```
   * There are plenty of better ways to configure your shell.  This is the simplest.
 * Same basic idea if you use Bash.
