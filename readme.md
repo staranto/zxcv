@@ -67,7 +67,7 @@ It's important to recognize that, in addition to the functionality described her
 
 ## Terraform CLI Version Management
 
-`t` will give you a list of version management commands that can be run.  Primarily several variations of `t switch` which is roughly inline with tfenv.  `t prune` cleans unused versions from the `asdf` shim cache.  `t local` provides `asdf` local functionality.  If you're new to `asdf` or the shell, note that `t switch ...` is shell session specific.  If you have two shells open, doing a `t switch ...` in one will have no impact on the other.  You can also set a "machine default" version by using the [asdf global](https://asdf-vm.com/guide/getting-started.html#global) feature.
+Naked `t` will give you a list of version management commands that can be run.  Primarily several variations of `t switch` which is roughly inline with tfenv.  `t prune` cleans unused versions from the `asdf` shim cache.  `t local` provides `asdf` local functionality.  If you're new to `asdf` or the shell, note that `t switch ...` is shell session specific.  If you have two shells open, doing a `t switch ...` in one will have no impact on the other.  You can also set a "machine default" version by using the [asdf global](https://asdf-vm.com/guide/getting-started.html#global) feature.
 
 ## Terraform CLI Extensions
 
@@ -77,7 +77,7 @@ More to come...
 
 ## Terraform API Query Wrappers
 
-The idea behind these commands is to provide CLI-based convenience functionality to easily query TFC/TFE.  Including the ability to pipe the results into other commands (standard Linuxy stuff).
+The idea behind these commands is to provide CLI-based convenience functionality to easily query TFC/TFE.  Including the ability to pipe the results into other commands (normal Linuxy stuff).
 
 The query commands follow the same pattern.  There is a standard set of syntax that can be applied to any command.  The list of fields that can be queried vary by command and are, unfortunately, not documented clearly by Hashicorp.  My best advice is to look at the [API docs](https://www.terraform.io/cloud-docs/api-docs) or at the specific API Response Schema links below.  Anything included in the JSON `attributes` object can be included as a field in the query result set.
 
@@ -89,7 +89,7 @@ The query commands follow the same pattern.  There is a standard set of syntax t
 
 `org orgname` - query resources in the specified orgname.  Defaults to either the organization specified in `${HOME}/.config/zxcv_t.cfg` or the organization defined in the current workspace state, if it exists.
 
-`--title|--json` - optional and mutually exclive.  `--title` - include a column title in text-output mode (the default).  `--json` - the output is valid JSON.
+`--title|--json` - optional and mutually exclusive.  `--title` - include a column title in text-output mode (the default).  `--json` - the output is valid JSON.
 
 `--sort sortspec` - optionally sort by the comma-seperated list of fields.
 
@@ -106,7 +106,7 @@ The command line arguments can appear in any order other than `cmd`, which must 
 | `t wq --json --sort -id` | workspace query sorted by `id`, descending and output in JSON format. |
 
 :bangbang:
-The schema found in the `attributes` object of the API response is specific to each query type.  Further, some queries (eg. `sq`) will return a customer `attributes` schema for each resource instance type.  For example, the schema returned by a `aws_s3_bucket` instance is markedly different than the schema returned by a `aws_instance` instance.
+The schema found in the `attributes` object of the API response is specific to each query type.  Further, some queries (eg. `sq`) will return a custom `attributes` schema for each resource instance type.  For example, the schema returned by an `aws_s3_bucket` instance is markedly different than the schema returned by an `aws_vpc` instance.
 
 :bangbang:
 The `attributes` object can, itself, contain objects.  As an example, AWS resources include an `attributes.tags_all` object.  If that object is included in a query field list (eg. `t sq --title tags_all`) the result might be --
@@ -142,7 +142,7 @@ In other words, in text output mode the object is returned as JSON.  This same q
 ]
 ```
 
-Further, you can report on specific attributes in an object.  The output of `t sq --title tags_all.name tags_all.iac_framework` might be --
+Further, you can report on specific attributes in an object.  The output of `t sq tags_all.name tags_all.iac_framework` might be --
 
 | resource | name | iac_framework |
 | --- | --- | --- |
@@ -179,3 +179,15 @@ Query the most recent state for the workpace active in the current working direc
 Unfortunately, the state API Response Schema is not well documented by Hashicorp.  The state can be found by hitting a "Hosted State Download" URL.  Any field found in `.Instances[].attributes` can be included in a sq query.  Also note that the scheme for each `attribute` block will be different for each resource type represented.
 
 Common fields to include in a sq query are: `arn`, `id`, `tags` and `tags_all`.
+
+### _wq - Workspace Query_
+
+`t wq terraform-version resource-count`
+
+`# This will take a minute and dump all workspaces in all orgs.`
+
+`t wq --dump --all --progress terraform-version resource-count created-at updated-at`
+
+`t wq --json vcs-repo working-directory`
+
+[API Response Schema](https://www.terraform.io/cloud-docs/api-docs/workspaces#sample-response)
