@@ -1,0 +1,10 @@
+#! /usr/bin/bash
+
+for x in {1..10}; do
+  if [[ ${x} == 4 ]]; then
+    echo "Enter new value: "
+    read x
+  fi 
+  echo "The count is ${x}"
+  sleep .5
+done
