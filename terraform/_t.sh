@@ -59,4 +59,8 @@ while test ${#} -gt 0; do
   shift
 done
 
-terraform "${params[@]}"
+if [[ -n "${ZXCV_FILTER}" ]]; then
+  terraform "${params[@]}" | "${ZXCV_BASEDIR}/terraform/_t_filter.sh" "Output will stream here" "To view this run"
+else
+  terraform "${params[@]}"
+fi
