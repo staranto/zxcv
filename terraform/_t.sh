@@ -60,7 +60,9 @@ while test ${#} -gt 0; do
 done
 
 if [[ -n "${ZXCV_FILTER}" ]]; then
-  terraform "${params[@]}" | "${ZXCV_BASEDIR}/terraform/_t_filter.sh" "Output will stream here" "To view this run"
+  off="${ZXCV_TERRAFORM_FILTER_OFF}"
+  on="${ZXCV_TERRAFORM_FILTER_ON}"
+  terraform "${params[@]}" | "${ZXCV_BASEDIR}/terraform/_t_filter.sh" "${off}" "${on}"
 else
   terraform "${params[@]}"
 fi

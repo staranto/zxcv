@@ -17,7 +17,15 @@
 #      sourced in the current shell or a Bash script that is
 #      available on the shell PATH.
 function t() {
-  ZXCV_OP=(cfg-check kill mq oq pq sq sv wq) zxcv "t!terraform!${ZXCV_BASEDIR}/terraform/_t.sh" "${@}"
+  if [[ -n "${ZXCV_FILTER}" ]]; then
+    local off=$(_zxcv_terraform_var -k "filter.${ZXCV_FILTER}.off" -s)
+    local on=$( _zxcv_terraform_var -k "filter.${ZXCV_FILTER}.on"  -s)
+  fi
+
+  ZXCV_OP=(cfg-check kill mq oq pq sq sv wq) \
+  ZXCV_TERRAFORM_FILTER_OFF="${off:-zxcv_notfound_zxcv}" \
+  ZXCV_TERRAFORM_FILTER_ON="${on:-zxcv_notfound_zxcv}" \
+    zxcv "t!terraform!${ZXCV_BASEDIR}/terraform/_t.sh" "${@}"
 }
 
 # Lifecycle function.  Define pre- and post-execution

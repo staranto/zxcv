@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/env bash
 
 off="${1}"      # Key to turn output OFF.
 on="${2}"       # Key to turn output back ON.
