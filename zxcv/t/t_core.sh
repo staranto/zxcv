@@ -17,7 +17,7 @@
 #      sourced in the current shell or a Bash script that is
 #      available on the shell PATH.
 function t() {
-  ZXCV_OP=(cfg-check kill mq oq pq sq sv wq) zxcv t/terraform/_t.sh "${@}"
+  ZXCV_OP=(cfg-check kill mq oq pq sq sv wq) zxcv "t!terraform!${ZXCV_BASEDIR}/terraform/_t.sh" "${@}"
 }
 
 # Lifecycle function.  Define pre- and post-execution

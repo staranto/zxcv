@@ -22,7 +22,7 @@ function zxcv() {
     export ZXCV_READ_ARRAY_OPT="-a" # Zsh uses -A, Bash uses -a.
   fi
 
-  IFS=/ read -r short cmd wrapper <<< "${1}"
+  IFS=! read -r short cmd wrapper <<< "${1}"
 
   # Store the ASDF_cmd_VERSION var so it can be maintained later.
   local envvar && envvar="ASDF_$(echo "${cmd}" | awk '{ printf toupper($1)}')_VERSION"
