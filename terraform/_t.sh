@@ -59,4 +59,10 @@ while test ${#} -gt 0; do
   shift
 done
 
-terraform "${params[@]}"
+if [[ -n "${ZXCV_FILTER}" ]]; then
+  off="${ZXCV_TERRAFORM_FILTER_OFF}"
+  on="${ZXCV_TERRAFORM_FILTER_ON}"
+  terraform "${params[@]}" | "${ZXCV_BASEDIR}/terraform/_t_filter.sh" "${off}" "${on}"
+else
+  terraform "${params[@]}"
+fi
