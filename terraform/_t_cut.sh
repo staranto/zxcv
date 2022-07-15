@@ -1,9 +1,39 @@
 #!/usr/bin/env bash
 
-off="${1}"      # Key to turn output OFF.
-on="${2}"       # Key to turn output back ON.
-include="${3}"  # Should key line be included in output?
+function _get_var() {
+
+  local cfgfile
+  local default
+  local key
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -c) shift && cfgfile="${1}" ;;
+      -d) shift && default="${1}" ;;
+      -k) shift && key="${1}" ;;
+      *)
+        >&2 echo "Unknown argument ${1}"
+        return 1
+        ;;
+    esac
+    shift
+  done
+
+  [[ "${val}" == "null" || -z "${val}" ]] && val=$(awk -F= -v key="${key}" '$1==key {print $2}' "${cfgfile}")
+
+  # The key wasn't in cfg file, so take the default.
+  [[ "${val}" == "null" || -z "${val}" ]] && val="${default}"
+
+  echo "${val}"
+}
+
+include="${1}"  # Should key line be included in output?
 show=1          # Should current line be output?
+
+if [[ -n "${ZXCV_CUT}" ]]; then
+  off=$(_get_var -c "${HOME}/.config/zxcv_t.cfg" -k "cut.${ZXCV_CUT}.off" -d "zxcv_ZAKP_zxcv")
+  on=$(_get_var -c "${HOME}/.config/zxcv_t.cfg" -k "cut.${ZXCV_CUT}.on"   -d "zxcv_ZAKP_zxcv")
+fi
 
 # Are we processing a key hit?  Only check for an ON
 # key of we're not already working on an OFF key.
