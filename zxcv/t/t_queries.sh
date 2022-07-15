@@ -302,11 +302,12 @@ function _zxcv_terraform_api() {
 function _zxcv_terraform_q1() {
   local    apiurl
   local    cmd
-  local    fields         # --     Additional fields to include in result.
-  local    host           # --host TFC/TFE hostname.
+  local    fields         # --       Additional fields to include in result.
+  local    filter         # --filter jq select spec
+  local    host           # --host   TFC/TFE hostname.
   local -i json=0 title=0 # --json --title Output json, titles or none.
-  local    org            # --org  TFC/TFE org if applicable to API.
-  local    sort           # --sort Field to sort by
+  local    org            # --org    TFC/TFE org if applicable to API.
+  local    sort           # --sort   Field to sort by
 
   shift && shift && cmd="${1}" && shift
   while [[ $# -gt 0 ]]; do
@@ -316,6 +317,7 @@ function _zxcv_terraform_q1() {
         return
         ;;
       --apiurl|-a)  shift && apiurl="${1}" ;;
+      --filter|-f)  shift && filter="${1}" ;;
       --host|-h)    shift && host="${1}" ;;
       --json|-j)    json=1 ;;
       --org)        shift && org="${1}" ;;
@@ -337,6 +339,7 @@ function _zxcv_terraform_q1() {
     -h "${host}" \
     -j "${json}" -t "${title}" \
     -o "${org}" \
+    -fi "${filter}" \
     -s "${sort}" \
     -au "${apiurl}")
 
@@ -347,6 +350,7 @@ function _zxcv_terraform_q2() {
   local    apiurl         # -au   API URL.
   local    cmd            # -c    zxcv_terraform command - oq, mq, etc.
   local -a fields         # -f    Additional fields to include in result.
+  local    filter         # -fi
   local    host           # -h    TFC/TFE hostname.
   local -i json=0 title=0 # -j -t Output json, titles or none.
   local    org            # -o    TFC/TFE org if applicable to API.
@@ -368,6 +372,7 @@ function _zxcv_terraform_q2() {
         shift
         IFS="," read -r "${ZXCV_READ_ARRAY_OPT:=-A}" fields <<< "${1}"
         ;;
+      -fi)  shift && filter="${1}" ;;
       -h)   shift && host="${1}" ;;
       -j)   shift && json=${1} ;;
       -o)   shift && org="${1}" ;;
@@ -404,7 +409,7 @@ function _zxcv_terraform_q2() {
     printf "%s" "${apiresult}" |
       jq --raw-output --from-file -L "${ZXCV_BASEDIR}/zxcv/t" \
         "${ZXCV_BASEDIR}/zxcv/t/${cmd}.jq" --arg j "${json}" \
-        --args ${fields[@]} | jq --raw-output --slurp "$(_zxcv_terraform_sort_filter "${sort}")"
+        --args ${fields[@]} | jq --raw-output --slurp "$(_zxcv_terraform_sort_filter "${sort}")""${filter}"
   )
   printf "%s" "${apiresult}"
   [[ -n "${ZXCV_DBG}" ]] && >&2 printf "q2 %s.jq=%s\n" "${cmd}" "${apiresult}"

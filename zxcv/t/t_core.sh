@@ -17,14 +17,7 @@
 #      sourced in the current shell or a Bash script that is
 #      available on the shell PATH.
 function t() {
-  if [[ -n "${ZXCV_CUT}" ]]; then
-    local off=$(_zxcv_terraform_var -k "filter.${ZXCV_CUT}.off" -s)
-    local on=$( _zxcv_terraform_var -k "filter.${ZXCV_CUT}.on"  -s)
-  fi
-
   ZXCV_OP=(cfg-check kill mq oq pq sq sv wq) \
-  ZXCV_TERRAFORM_CUT_OFF="${off:-zxcv_notfound_zxcv}" \
-  ZXCV_TERRAFORM_CUT_ON="${on:-zxcv_notfound_zxcv}" \
     zxcv "t!terraform!${ZXCV_BASEDIR}/terraform/_t.sh" "${@}"
 }
 
