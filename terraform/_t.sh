@@ -59,10 +59,10 @@ while test ${#} -gt 0; do
   shift
 done
 
-if [[ -n "${ZXCV_FILTER}" ]]; then
-  off="${ZXCV_TERRAFORM_FILTER_OFF}"
-  on="${ZXCV_TERRAFORM_FILTER_ON}"
-  terraform "${params[@]}" | "${ZXCV_BASEDIR}/terraform/_t_filter.sh" "${off}" "${on}"
+if [[ -n "${ZXCV_CUT}" ]]; then
+  off="${ZXCV_TERRAFORM_CUT_OFF}"
+  on="${ZXCV_TERRAFORM_CUT_ON}"
+  terraform "${params[@]}" | "${ZXCV_BASEDIR}/terraform/_t_cut.sh" "${off}" "${on}"
 else
   terraform "${params[@]}"
 fi
