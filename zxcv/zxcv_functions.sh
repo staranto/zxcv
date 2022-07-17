@@ -132,6 +132,19 @@ HELPTEXT
       ;;
 
     *)
+      local -a args=()
+      for arg in "${@}"; do
+        if [[ "${arg}" == @* ]]; then
+          local psdir && psdir=$(_get_var -c "${HOME}/.config/zxcv/zxcv.cfg" -k "t.paramset.dir" -d ~/.config/zxcv)
+          local f && eval f="${psdir}/${arg:1}"
+          while read -r "${ZXCV_READ_ARRAY_OPT:=-A}" fargs; do
+            args=(${args[@]} ${fargs[@]})
+          done < "${f}"
+        else
+          args+=("${arg}")
+        fi
+      done
+
       # If there is a wrapper executable (script, function, etc)
       # defined and available, use it.  If not, just use the
       # utility binary itself.
@@ -145,29 +158,57 @@ HELPTEXT
       local -i prepost=0
       command -v "zxcv_${cmd}" &> /dev/null
       # shellcheck disable=2181
-      [[ "$?" == "0" ]] && prepost=1 && "zxcv_${cmd}" pre "${@}"
+      [[ "$?" == "0" ]] && prepost=1 && "zxcv_${cmd}" pre "${args[@]}"
 
       # Process ZXCV_OP if defined, otherwise pass through
       local op="${2}"
       # shellcheck disable=2076
       if [[ ${ZXCV_OP[*]} =~ "${op}" ]]; then
         if command -v "zxcv_${cmd}_${op}" &> /dev/null; then
-          "zxcv_${cmd}_${op}" "${exe}" "${@}"
+          "zxcv_${cmd}_${op}" "${exe}" "${args[@]}"
         else
           echo "Operation function zxcv_${cmd}_${op}() not defined."
           return 1
         fi
       else
-        "${exe}" "${@:2}"
+        "${exe}" "${args[@]:2}"
       fi
 
-      [[ "${prepost}" == "1" ]] && "zxcv_${cmd}" post "${@}"
+      [[ "${prepost}" == "1" ]] && "zxcv_${cmd}" post "${args[@]}"
       ;;
   esac
+
   if [[ -n "${ZSH_VERSION}" ]]; then
     if [[ -n "${ZXCV_TRACE_FUNCTIONS}" ]]; then
       typeset +ft "${ZXCV_TRACE_FUNCTIONS}"
     fi
   fi
   set +x
+}
+
+function _get_var() {
+
+  local cfgfile
+  local default
+  local key
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -c) shift && cfgfile="${1}" ;;
+      -d) shift && default="${1}" ;;
+      -k) shift && key="${1}" ;;
+      *)
+        >&2 echo "Unknown argument ${1}"
+        return 1
+        ;;
+    esac
+    shift
+  done
+
+  [[ "${val}" == "null" || -z "${val}" ]] && val=$(awk -F= -v key="${key}" '$1==key {print $2}' "${cfgfile}")
+
+  # The key wasn't in cfg file, so take the default.
+  [[ "${val}" == "null" || -z "${val}" ]] && val="${default}"
+
+  echo "${val}"
 }

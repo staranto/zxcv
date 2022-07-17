@@ -58,15 +58,17 @@ function _zxcv_terraform_tfe_token() {
 # Get a value from the current Teraform config.
 function _zxcv_terraform_var() {
 
-  local cfgfile="${HOME}/.config/zxcv_t.cfg"
+  local cfgfile="${HOME}/.config/zxcv/zxcv.cfg"
   local default
   local key
+  local ns="t"
   local skipstate=0
   while [[ $# -gt 0 ]]; do
     case $1 in
       -c) shift && cfgfile="${1}" ;;
       -d) shift && default="${1}" ;;
       -k) shift && key="${1}" ;;
+      -n) shift && ns="${1}" ;;
       -s) skipstate=1 ;;
       *)
         >&2 echo "Unknown argument ${1}"
@@ -75,6 +77,8 @@ function _zxcv_terraform_var() {
     esac
     shift
   done
+
+  key="${ns}.${key}"
 
   local val
   # If this is a TF root dir (there's a state file), grab the value from it.

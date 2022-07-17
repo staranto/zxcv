@@ -9,10 +9,10 @@
 
 ## Configuration
 
-* Create `${HOME}/.config/zxcv_t.cfg` with this content --
+* Create `${HOME}/.config/zxcv/zxcv.cfg` with this content --
     ```
-    hostname=app.terraform.io  # The hostname of your TFC/TFE server.
-    organization=myorg         # The default TFC/TFE org to use.
+    t.hostname=app.terraform.io  # The hostname of your TFC/TFE server.
+    t.organization=myorg         # The default TFC/TFE org to use.
     ```
 
 * Make sure you have a TFC/TFE API token set locally.  IOW... do a `terraform login`.  The token will be stored in `${HOME}/.terraformrc` (older Terraform versions) or `${HOME}/.terraform.d/credentials.tfrc.json` (newer Terraform versions).  It doesn't matter at all which file is used.  We'll always first use the latter, even if an older Terraform CLI is being used.
@@ -87,7 +87,7 @@ The query commands follow the same pattern.  There is a standard set of syntax t
 
 `cmd` - one of `mq`, `oq`, `sq`, `sv` or `wq`.
 
-`org orgname` - query resources in the specified orgname.  Defaults to either the organization specified in `${HOME}/.config/zxcv_t.cfg` or the organization defined in the current workspace state, if it exists.
+`org orgname` - query resources in the specified orgname.  Defaults to either the organization specified in `${HOME}/.config/zxcv/zxcv.cfg` or the organization defined in the current workspace state, if it exists.
 
 `--title|--json` - optional and mutually exclusive.  `--title` - include a column title in text-output mode (the default).  `--json` - the output is valid JSON.
 

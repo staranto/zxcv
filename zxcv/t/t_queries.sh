@@ -11,6 +11,7 @@ function zxcv_terraform_mq() {
 # to be used as input into other functions (notabled wq).
 # Additional output fields can be specified.
 function zxcv_terraform_oq() {
+
   # shellcheck disable=2016
   _zxcv_terraform_q1 "${@}" --apiurl 'https://${host}/api/v2/organizations\?page\[size\]\=100'
 }
@@ -165,11 +166,11 @@ function zxcv_terraform_wq() {
         orgs=($(t oq --host "${host}"))
         ;;
       --host|-h)  shift && host="${1}" ;;
-      --json|-j)  json=1 ;;
+      --json|-j)  json=1 && title=0;;
       --org|-o)   shift && orgs=("${1}") ;;
       --progress|-p) progress=1 ;;
       --sort|-s)  shift && sort="${1}" ;;
-      --title|-t) title=1 ;;
+      --title|-t) title=1 && json=0 ;;
       --ws|-w)    shift && wsspec="${1}" ;;
       *) # Naked args at end are fields.
         fields+="attributes.${1}," ;;
@@ -319,10 +320,10 @@ function _zxcv_terraform_q1() {
       --apiurl|-a)  shift && apiurl="${1}" ;;
       --filter|-f)  shift && filter="${1}" ;;
       --host|-h)    shift && host="${1}" ;;
-      --json|-j)    json=1 ;;
+      --json|-j)    json=1 && title=0 ;;
       --org)        shift && org="${1}" ;;
       --sort|-s)    shift && sort="${1}" ;;
-      --title|-t)   title=1 ;;
+      --title|-t)   title=1 && json=0 ;;
       *) # Naked args at end are fields.
         fields+="attributes.${1}," ;;
     esac
