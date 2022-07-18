@@ -145,6 +145,8 @@ HELPTEXT
         fi
       done
 
+      [[ -n "${ZXCV_DBG}" ]] && >&2 echo "zxcv.args ${args[*]}"
+
       # If there is a wrapper executable (script, function, etc)
       # defined and available, use it.  If not, just use the
       # utility binary itself.
@@ -152,6 +154,8 @@ HELPTEXT
       if ! command -v "${exe}" &> /dev/null; then
         exe="${cmd}"
       fi
+
+      [[ -n "${ZXCV_DBG}" ]] && >&2 printf "exe=%s\n" "${exe}"
 
       # Pre/post methods are defined in zxcv_${cmd}.
       # Execute them if it exists.
@@ -162,16 +166,19 @@ HELPTEXT
 
       # Process ZXCV_OP if defined, otherwise pass through
       local op="${2}"
+      [[ -n "${ZXCV_DBG}" ]] && >&2 printf "op=%s\n" "${op}"
+
       # shellcheck disable=2076
       if [[ ${ZXCV_OP[*]} =~ "${op}" ]]; then
         if command -v "zxcv_${cmd}_${op}" &> /dev/null; then
+          [[ -n "${ZXCV_DBG}" ]] && >&2 printf "zxcv_cmd_op=zxcv_%s_%s\n" "${cmd}" "${op}"
           "zxcv_${cmd}_${op}" "${exe}" "${args[@]}"
         else
           echo "Operation function zxcv_${cmd}_${op}() not defined."
           return 1
         fi
       else
-        "${exe}" "${args[@]:2}"
+        "${exe}" "${args[@]:1}"
       fi
 
       [[ "${prepost}" == "1" ]] && "zxcv_${cmd}" post "${args[@]}"

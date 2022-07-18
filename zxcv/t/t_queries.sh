@@ -127,6 +127,11 @@ function zxcv_terraform_sv() {
     wsfilter="\&filter\[workspace\]\[name\]\=${wsspec}\&filter\[organization\]\[name\]\=${org}"
   fi
 
+  >&2 echo wsname=$wsname
+  >&2 echo wsprefix=$wsprefix
+  >&2 echo wssuffix=$wssuffix
+  >&2 echo wsspec=$wsspec
+
   local apiresult
   # shellcheck disable=SC2016
   apiresult=$(_zxcv_terraform_q2 -c sv \

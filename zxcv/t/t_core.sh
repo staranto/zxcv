@@ -78,14 +78,12 @@ function _zxcv_terraform_var() {
     shift
   done
 
-  key="${ns}.${key}"
-
   local val
   # If this is a TF root dir (there's a state file), grab the value from it.
   [[ "${skipstate}" == "0" && -f ".terraform/terraform.tfstate" ]] && val=$(jq --raw-output .backend.config."${key}" .terraform/terraform.tfstate)
 
   # The key wasn't in a state file, so go to the cfg file
-  [[ "${val}" == "null" || -z "${val}" ]] && val=$(awk -F= -v key="${key}" '$1==key {print $2}' "${cfgfile}")
+  [[ "${val}" == "null" || -z "${val}" ]] && val=$(awk -F= -v key="${ns}.${key}" '$1==key {print $2}' "${cfgfile}")
 
   # The key wasn't in cfg file either, so take the default.
   [[ "${val}" == "null" || -z "${val}" ]] && val="${default}"
