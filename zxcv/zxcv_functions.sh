@@ -198,6 +198,7 @@ function _get_var() {
   local cfgfile
   local default
   local key
+  local val
 
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -212,10 +213,16 @@ function _get_var() {
     shift
   done
 
-  [[ "${val}" == "null" || -z "${val}" ]] && val=$(awk -F= -v key="${key}" '$1==key {print $2}' "${cfgfile}")
+  [[ -n "${ZXCV_DBG}" ]] && {
+    >&2 echo "cfgfile=${cfgfile}"
+    >&2 echo "default=${default}"
+    >&2 echo "key=${key}"
+  }
+
+  val=$(awk -F= -v key="${key}" '$1==key {print $2}' "${cfgfile}")
 
   # The key wasn't in cfg file, so take the default.
-  [[ "${val}" == "null" || -z "${val}" ]] && val="${default}"
+  [[ -z "${val}" ]] && val="${default}"
 
   echo "${val}"
 }
