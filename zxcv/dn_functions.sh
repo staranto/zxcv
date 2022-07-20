@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function dn() {
-  zxcv dn/dotnet "${@}"
+  zxcv dn!dotnet "${@}"
 }
 
 ##shellcheck source=/dev/null
