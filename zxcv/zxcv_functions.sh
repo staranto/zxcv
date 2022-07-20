@@ -23,6 +23,9 @@ function zxcv() {
   fi
 
   IFS=! read -r short cmd wrapper <<< "${1}"
+  [[ -n "${ZXCV_DBG}" ]] && {
+    >&2 printf "short=%s\ncmd=%s\nwrapper=%s\n" "${short}" "${cmd}" "${wrapper}"
+  }
 
   # Store the ASDF_cmd_VERSION var so it can be maintained later.
   local envvar && envvar="ASDF_$(echo "${cmd}" | awk '{ printf toupper($1)}')_VERSION"
