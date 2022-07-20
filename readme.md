@@ -46,8 +46,8 @@
       ```
       export REPO_BASEDIR=${HOME}/dev
       export ZXCV_BASEDIR=${REPO_BASEDIR}/zxcv
-      for f in ${REPO_BASEDIR}/misc/*.sh; do [[ -f "$f" ]] && . "$f"; done
-      sall ${ZXCV_BASE_DIR}/zxcv
+      for f in ${ZXCV_BASEDIR}/misc/*.sh; do [[ -f "$f" ]] && . "$f"; done
+      sall ${ZXCV_BASEDIR}/zxcv
       ```
   * There are plenty of better ways to configure your shell.  This is the simplest.
 * Same basic idea if you use Bash.
