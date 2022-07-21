@@ -153,7 +153,7 @@ Further, you can report on specific attributes in an object.  The output of `t s
 
 ## Parameter Sets
 
-Common queries options can be stored in a Parameter Set file.  By defaut, these files are stored in `$ZXCV_CFGDIR`.  A different default location can be used by setting `$ZXCV_PSDIR` or explicitly specifying an explicit file on the command line.
+Common queries options can be stored in a Parameter Set file.  By defaut, these files are stored in `$ZXCV_CFGDIR`.  A different default location can be used by setting `$ZXCV_PSDIR` or specifying an explicit file on the command line.
 
 Parameter sets save you from having to remember re-type long command lines.  For example --
 
