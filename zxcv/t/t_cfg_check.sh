@@ -3,22 +3,16 @@
 function zxcv_terraform_cfg-check() {
 
   local cliCfgFile="${TF_CLI_CONFIG_FILE}"
-  local tCfgFile="${HOME}/.config/zxcv/zxcv.cfg"
+  local tCfgFile="${ZXCV_CFGDIR}/zxcv.cfg"
   local tfeToken="${TFE_TOKEN}"
   local zxcvBaseDir="${ZXCV_BASEDIR}"
 
   # Basic checks of core config items.
-  _check "E" "ZXCV_BASE_DIR" "${zxcvBaseDir}"
+  _check "E" "ZXCV_BASEDIR" "${zxcvBaseDir}"
   [[ ! -f "${tCfgFile}" ]] && _result "E" "${tCfgFile} is not found"
 
-
-  echo 111
-
-  if ls "${HOME}"/.config/zxcv_*.cfg 2> /dev/null; then
-    _result "W" "Stale zxcv config files found"
-  fi
-
-  echo 222
+  _check "W" "ZXCV_CFGDIR" "${ZXCV_CFGDIR}"
+  _check "W" "ZXCV_PSDIR"  "${ZXCV_PSDIR}"
 
   _check " " "TF_CLI_CONFIG_FILE" "${cliCfgFile}"
   [[ -n "${cliCfgFile}" && ! -f "${cliCfgFile}" ]] && _result "E" "${cliCfgFile} is not found"

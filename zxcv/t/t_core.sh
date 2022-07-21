@@ -58,7 +58,7 @@ function _zxcv_terraform_tfe_token() {
 # Get a value from the current Teraform config.
 function _zxcv_terraform_var() {
 
-  local cfgfile="${HOME}/.config/zxcv/zxcv.cfg"
+  local cfgfile="${ZXCV_CFGDIR}/zxcv.cfg"
   local default
   local key
   local ns="t"

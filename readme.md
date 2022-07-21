@@ -14,9 +14,10 @@
     t.hostname=app.terraform.io  # The hostname of your TFC/TFE server.
     t.organization=myorg         # The default TFC/TFE org to use.
     ```
+  Pick whatever directory you like.  By convention, on Linux/Mac it would be in `${HOME}/.config/zxcv`, but it can be anywhere.  This directory will become the value if `$ZXCV_CFGDIR` below.
 
 * Make sure you have a TFC/TFE API token set locally.  IOW... do a `terraform login`.  The token will be stored in `${HOME}/.terraformrc` (older Terraform versions) or `${HOME}/.terraform.d/credentials.tfrc.json` (newer Terraform versions).  It doesn't matter at all which file is used.  We'll always first use the latter, even if an older Terraform CLI is being used.
-  * Note that there's a potential chicken-n-egg situation here.  You can't do a `terraform login` unless the CLI is first installed, which might not be the case.  If you don't yet have it installed, you can login to TFC/TFE and go to `User Settings / Tokens / Create API Token` and then create a `${HOME}/.terraform.d/credentials.tfrc.json` file with this content --
+  * :bangbang: Note that there's a potential chicken-n-egg situation here.  You can't do a `terraform login` unless a proper CLI is first installed, which might not be the case.  If you don't yet have it installed, you can login to TFC/TFE and go to `User Settings / Tokens / Create API Token` and then create a `${HOME}/.terraform.d/credentials.tfrc.json` file with this content --
 
     ```
     {
@@ -44,8 +45,10 @@
   * Edit `${HOME}/.zshrc` (or `${HOME}/.bashrc`) and include these lines near the top...
       ```
       # Change ${HOME}/dev if you cloned someplace else.
-      export REPO_BASEDIR=${HOME}/dev 
-      export ZXCV_BASEDIR=${REPO_BASEDIR}/zxcv
+      export REPO_BASEDIR="${HOME}/dev"
+      export ZXCV_BASEDIR="${REPO_BASEDIR}/zxcv"
+      # Change to the directory where you created `zxcv.cfg` above.
+      export ZXCV_CFGDIR="${HOME}/.config/zxcv"
       for f in ${ZXCV_BASEDIR}/misc/*.sh; do [[ -f "$f" ]] && . "$f"; done
       sall ${ZXCV_BASEDIR}/zxcv
       ```
@@ -148,6 +151,41 @@ Further, you can report on specific attributes in an object.  The output of `t s
 | `aws_cloudtrail.trail` | `-` | `ngtf` |
 | `aws_vpc.es` | `prod-core` | `ngtf` |
 
+## Parameter Sets
+
+Common queries options can be stored in a Parameter Set file.  By defaut, these files are stored in `$ZXCV_CFGDIR`.  A different default location can be used by setting `$ZXCV_PSDIR` or explicitly specifying an explicit file on the command line.
+
+Parameter sets save you from having to remember re-type long command lines.  For example --
+
+Instead of having to remember and type --
+
+`t wq --json --dump --all --sort -resource-count,-updated-at org created-at updated-at terraform-version resource-count`
+
+you can store these options in a file (ie. `${ZXCV_PSDIR}/wqda.ps`) like so --
+
+```
+--json --dump --all
+--sort -resource-count,-updated-at
+org created-at updated-at terraform-version resource-count
+```
+
+and then execute it with --
+
+```
+t wq @wqda.ps
+```
+
+Parameters from the set are inserted *exactly* in the sequence they are found in the command line.  For example, in the above, if you wanted to use all the parameters specified in the set *except* you wanted the output in text instead of JSON, you can override the `--json` parameter simply by --
+
+```
+t wq @wqda.ps --title
+```
+
+This will produce the command line --
+
+`t wq --json --dump --all --sort -resource-count,-updated-at org created-at updated-at terraform-version resource-count --title`
+
+with the `--json` at the beginning (from the Parameter Set) being overridden by the `--title` at the end.
 
 ## Queries
 

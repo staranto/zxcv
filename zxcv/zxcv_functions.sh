@@ -8,6 +8,9 @@ function zxcv() {
     return 1
   fi
 
+  [[ -z "${ZXCV_CFGDIR}" ]] && export ZXCV_CFGDIR="${HOME}/.config/zxcv"
+  [[ -z "${ZXCV_PSDIR}" ]]  && export ZXCV_PSDIR="${ZXCV_CFGDIR}"
+
   if [[ -n "${ZSH_VERSION}" ]]; then
     emulate -L zsh
     if [[ -n "${ZXCV_TRACE_FUNCTIONS}" ]]; then
@@ -138,7 +141,7 @@ HELPTEXT
       local -a args=()
       for arg in "${@}"; do
         if [[ "${arg}" == @* ]]; then
-          local psdir && psdir=$(_get_var -c "${HOME}/.config/zxcv/zxcv.cfg" -k "t.paramset.dir" -d ~/.config/zxcv)
+          local psdir && psdir=$(_get_var -c "${ZXCV_CFGDIR}/zxcv.cfg" -k "t.paramset.dir" -d "${ZXCV_PSDIR}")
           local f && eval f="${psdir}/${arg:1}"
           while read -r "${ZXCV_READ_ARRAY_OPT:=-A}" fargs; do
             args=(${args[@]} ${fargs[@]})
