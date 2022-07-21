@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 RUN  apt update && \
      apt install -y curl fzf git
 
-RUN  git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.10.0 
+RUN  git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.10.0
 RUN  bash -c ". ${HOME}/.asdf/asdf.sh"
 RUN  ls -lta ${HOME}/.asdf && ls -lta ${HOME}
 RUN  asdf update && asdf plugin add terraform
@@ -24,7 +24,7 @@ COPY <<EOF
 {
   "credentials": {
     "app.terraform.io": {
-      "token": "yQlSTuG7eHtp2g.atlasv1.lhEXASnbwJNA2UKiFvhOqEsEFU4xIUXjKIcyUfnduQ60PiaEBZ3CW9BfV7onoEZAg0w"
+      "token": "<inject token>"
     }
   },
   "disable_checkpoint": true
