@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+function k() {
+  zxcv k/kubectl "${@}"
+}
+
+# shellcheck source=/dev/null
+function zxcv_kubectl() {
+  local shell
+  shell="${SHELL##*/}"
+
+  case "${1}" in
+    "pre")
+      ;;
+    "post")
+      # source <(kubectl completion "${shell}" | sed 's/^compdef.*$/& k/')
+      ;;
+  esac
+}

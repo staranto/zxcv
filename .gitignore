@@ -1,0 +1,3 @@
+.history
+t_*.auto.tfvars
+**/zk*
